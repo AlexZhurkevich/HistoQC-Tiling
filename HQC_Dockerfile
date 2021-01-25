@@ -1,0 +1,18 @@
+FROM ubuntu:18.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG user
+
+RUN useradd -ms /bin/bash $user \
+    && apt-get update \
+    && apt-get install -y git python3-pip python3.6 \
+    && apt-get install -y openslide-tools 
+    
+USER $user
+
+WORKDIR /home/$user
+
+RUN git clone https://github.com/choosehappy/HistoQC.git \ 
+    && pip3 install -r /home/$user/HistoQC/requirements.txt 
+
+WORKDIR /home/$user/HistoQC
