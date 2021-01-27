@@ -33,3 +33,28 @@ To run Tiler in my container you can: `docker run --rm -it -v /hdd:/mnt upscaler
 `--outdir` output directory where your tiles will be stored.  
 `--slides` argument expects a glob pattern for all of your `.svs` files, its essentially the same as last positional argument you've passed to `qc_pipeline` and `Upscaler`.  
 `--masks` argument expects a glob pattern for all of your `svs_mask_use.tif`, these `.tif` files are upscaled masks that we got after running `Upscaler`, so you will pass almost the same thing you've passed to Upscaler under `--masks` argument, the only difference is for Upscaler the final part of the extension was `.png`, but in case of `Tiler` it will be `.tif`, hence `/mnt/HISTOQC_OUTDIR/*/*svs_mask_use.tif`. 
+
+
+
+**Python instructions**:  
+If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you'll have to build it from [source](https://libvips.github.io/libvips/install.html).  
+In order to run the programs there wont be any changes, same arguments, same programs, just drop `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest` part.
+
+
+
+**Additional information**:
+1. Speed:
+Intel(R) Core(TM) i7-5820K CPU overclocked to 4.09Ghz, 12 threads.  
+Dataset: 1608 TCGA LUAD .svs slides.    
+HistoQC runtime: 3.5 Hours.  
+Upscaler runtime: 15 Hours.  
+Tiler runtime: 19 Hours.  
+Scales lineary depending on how many threads you have, at some point might encounter I/O bottlenecks if using hard drive.  
+
+2. Whats next?
+You can either work with tiles however you want or your can continue with Nicolas Coudray's [DeepPath](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code) your steps will start at **0.2a Sort the tiles into train/valid/test sets according to the classes defined** section. 
+
+
+
+
+Thank you. Consider sharing on social media. 
