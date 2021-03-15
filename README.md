@@ -36,7 +36,7 @@ Arguments:
   - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
   - `--magnification` magnification at which the tiles should be taken. Example: 20.0.  
   - `--size` tile size. Example: 256 (256x256).  
-  - `--overlap` you can tile your slide with overlap of `N` pixels. **Remember!!!** The formula for overlap: `tile size + 2 * overlap`, so if you want tiles of size 256x256, you need to pass 128 as `--size` argument and 64 as `--overlap` argument. If you want more info [OpenSlide docu](https://openslide.org/api/python/). Example: 64.  
+  - `--overlap` you can tile your slide with overlap of `N` pixels. **Remember!!!**: the formula for overlap: `tile size + 2 * overlap`, so if you want tiles of size 256x256, you need to pass 128 as `--size` argument and 64 as `--overlap` argument. If you want more info [OpenSlide docu](https://openslide.org/api/python/). Example: 64.  
   - `--format` tile file format, I recommend jpeg, faster to write and takes less space. Example: 'jpeg'.   
   - `--outdir` output directory where your tiles will be stored.  
   - `--slides` argument expects a glob pattern for all of your `.svs` files, its essentially the same as last positional argument you've passed to `qc_pipeline` and `Upscaler`.  
@@ -54,8 +54,8 @@ Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/
 ### Docker arguments:
   - `-u $(id -u ${USER}):$(id -g ${USER})` sets a user that uses a container, this particular command will set your host username as username running inside of the container, this will eliminate privilige issues. I do not recommend changing it unless you know what are you doing.  
   - `-v` mount volume of host machine to a container, you should mount a volume that has `outdir` of **SVS_Tiler.py** as well as directory where you store **Sort_Tiles.py**. This way you will have an access to files from previous step, as well as sorting program. Example /hdd:/mnt.
-  - `-w` setting workplace, this is a container directory that contains **Sort_Tiles.py** file you've mounted with `-v`. Example /mnt/YOUR_SORT_FOLDER. **Remember!!!**
- Since you've mounted host volume to a container, access to directory inside a container will be relative to a container. In other words, if you have **Sort_Tiles.py** in `/hdd/YOUR_SORT_FOLDER/Sort_Tiles.py` on host machine, when you mount with `-v /hdd:/mnt`, container filepath is this `/mnt/YOUR_SORT_FOLDER/Sort_Tiles.py` and `/mnt/YOUR_SORT_FOLDER/` is argument you should pass, otherwise container wont see **Sort_Tiles.py** file.
+  - `-w` setting workplace, this is a container directory that contains **Sort_Tiles.py** file you've mounted with `-v`. Example /mnt/YOUR_SORT_FOLDER. **Remember!!!**:
+ ince you've mounted host volume to a container, access to directory inside a container will be relative to a container. In other words, if you have **Sort_Tiles.py** in `/hdd/YOUR_SORT_FOLDER/Sort_Tiles.py` on host machine, when you mount with `-v /hdd:/mnt`, container filepath is this `/mnt/YOUR_SORT_FOLDER/Sort_Tiles.py` and `/mnt/YOUR_SORT_FOLDER/` is argument you should pass, otherwise container wont see **Sort_Tiles.py** file.
 
 ### Sort_Tiles.py arguments:
 I recommend checking out [argument instructions](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code#02a-sort-the-tiles-into-trainvalidtest-sets-according-to-the-classes-defined). I recommend keeping your `--JsonFile=` file in the same folder as **Sort_Tiles.py**, for `--Magnification=` pass the same thing you've passed for magnification at [Tiler](https://github.com/AlexZhurkevich/HistoQC-Tiling#3-running-slide-tiler) step. Pass the output directory of **SVS_Tiler.py** to `--SourceFolder=`. 
@@ -72,10 +72,10 @@ Arguments:
   - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
   - `--sort_dir` a directory where your sorted dataset resides, a place where you ran **Sort_Tiles.py** at previous step. Example: '/mnt/YOUR_SORT_FOLDER'.
   - `--outdir` a directory where you would like to see TFRecords. Example: '/mnt/YOUR_TFRecords'.
-  - `--num_files` numer of train TFRecords you want, **Remember!!!** the number given should be divisible by number of threads. Example: 1020.
+  - `--num_files` numer of train TFRecords you want, **Remember!!!**: the number given should be divisible by number of threads. Example: 1020.
   - `--size` tile size. Example: 256 (256x256).  
   - `--format` tile file format. Example: 'jpeg'.
-  - `--oversampling` whether you want to oversample your minority class, it will repeat images from minority class until it comes close to number of images from majority class. Example: 'Yes' or 'No'.
+  - `--oversampling` whether you want to oversample your minority class, it will repeat images from minority class until it comes close to number of images from majority class. It is done only for training. **Remember!!!**: for now only works with 2 classes. Example: 'Yes' or 'No'.
 
 
 **Python instructions**:  
