@@ -10,7 +10,8 @@ You can refer to [original](https://github.com/choosehappy/HistoQC) installation
 Do not forget to specify **YOUR_USERNAME** as your host **username**, otherwise you are risking running docker as root and if you do not have a sudo on your machine, all resulted files will be unaccessible to you.
 
 ## 2. **Running**:
-To run HistoQC in my container you can: `docker run --rm -it -v /hdd:/mnt histoqc/histoqc:latest python3 qc_pipeline --nthreads 12 --config config.ini --outdir /mnt/HISTOQC_OUTDIR /mnt/SVS_FILE_PATH/*/*.svs`.  
+To run HistoQC in my container you can:  
+`docker run --rm -it -v /hdd:/mnt histoqc/histoqc:latest python3 qc_pipeline --nthreads 12 --config config.ini --outdir /mnt/HISTOQC_OUTDIR /mnt/SVS_FILE_PATH/*/*.svs`.  
 I highly recommend checking out the `qc_pipeline.py` instructions on HistoQC under [Basic Usage](https://github.com/choosehappy/HistoQC#basic-usage) section. 
 It will give you an idea what kind of arguments you can pass to HistoQC, you can experiment.   
 In addition to HistoQC arguments, you should mount a correct volume to your container, it is done with `-v /hdd:/mnt` on sample command.
