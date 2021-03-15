@@ -86,7 +86,7 @@ To run **TFRecord_Creator.py** in my container you can:
 `docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Xception.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/efficientNet_MP_best' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Xception.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_Xception_logs' --GPU_num 0,1 --batch_size 28`
 
 Arguments:
-  - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
+ 
 
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
