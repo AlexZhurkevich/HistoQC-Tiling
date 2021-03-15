@@ -49,7 +49,8 @@ Copy over [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/
 No **username** needed, we will pass it at runtime. We will also use this docker image for the rest of pipeline, hold on to it. 
 
 ## 2. **Running Sorting**:
-To run **Sort_Tiles.py** in my container 
+Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code). To run **Sort_Tiles.py** in my container, you need to manually copy over **Sort_Tiles.py** to a folder where you would like to store the output of this program. Sample command:  
+`docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -w /mnt/YOUR_FOLDER -v /hdd:/mnt tf/tf:latest python3 Sort_Tiles.py --SourceFolder=/mnt/TILER_OUTDIR --JsonFile=/mnt/YOUR_FOLDER/metadata_file --Magnification=20 --MagDiffAllowed=0 --SortingOption=6 --PercentTest=10 --PercentValid=10 --nSplit 0`
 
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
