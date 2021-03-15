@@ -77,6 +77,9 @@ Arguments:
   - `--format` tile file format. Example: 'jpeg'.
   - `--oversampling` whether you want to oversample your minority class, it will repeat images from minority class until it comes close to number of images from majority class. It is done only for training. **Remember!!!**: for now only works with 2 classes. Example: 'Yes' or 'No'.
 
+# Training
+
+
 
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
