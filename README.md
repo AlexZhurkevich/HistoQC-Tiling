@@ -78,7 +78,8 @@ Arguments:
   - `--oversampling` whether you want to oversample your minority class, it will repeat images from minority class until it comes close to number of images from majority class. It is done only for training. **Remember!!!**: for now only works with 2 classes. Example: 'Yes' or 'No'.
 
 # Training
-
+## 1. **Installation**:
+We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to train on GPUs, you need to install [NVIDIA CONTAINER TOOLKIT][(https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html). 
 
 
 **Python instructions**:  
