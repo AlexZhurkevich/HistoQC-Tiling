@@ -45,7 +45,7 @@ Arguments:
 # Sorting
 ## 1. **Installation**:
 Copy over [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/TF_Dockerfile) to you machine in a separate folder and build with:  
-`docker build --no-cache -t tf/tf:latest -f TF_Dockerfile .`. 
+`docker build --no-cache -t tf/tf:latest -f TF_Dockerfile .`  
 No **username** needed, we will pass it at runtime.
 
 ## 2. **Running Sorting**:
