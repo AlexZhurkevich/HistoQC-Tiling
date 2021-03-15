@@ -79,7 +79,7 @@ Arguments:
 
 # Training
 ## 1. **Installation**:
-We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to train on GPUs, you need to install [NVIDIA CONTAINER TOOLKIT][(https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html). 
+We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to train on GPUs, you need to install [NVIDIA CONTAINER TOOLKIT](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html). 
 
 
 **Python instructions**:  
