@@ -36,6 +36,7 @@ Arguments:
   - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
   - `--magnification` magnification at which the tiles should be taken. Example: 20.0.  
   - `--size` tile size. Example: 256 (256x256).  
+  - `--overlap` you can tile your slide with overlap by `N` pixels. Remember!!! The formula for overlap: `tile size + 2 * overlap`, so if you want tiles of size 256x256, you need to pass 128 as `--size` argument and 64 as `--overlap` argument. Example: 64.  
   - `--format` tile file format, I recommend jpeg, faster to write and takes less space. Example: 'jpeg'.   
   - `--outdir` output directory where your tiles will be stored.  
   - `--slides` argument expects a glob pattern for all of your `.svs` files, its essentially the same as last positional argument you've passed to `qc_pipeline` and `Upscaler`.  
