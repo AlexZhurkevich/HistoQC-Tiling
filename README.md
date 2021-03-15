@@ -60,6 +60,11 @@ Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/
 ### Sort_Tiles.py arguments:
 I recommend checking out [argument instructions](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code#02a-sort-the-tiles-into-trainvalidtest-sets-according-to-the-classes-defined). I recommend keeping your `--JsonFile=` file in the same folder as **Sort_Tiles.py**, for `--Magnification=` pass the same thing you've passed for magnification at [Tiler](https://github.com/AlexZhurkevich/HistoQC-Tiling#3-running-slide-tiler) step. Pass the output directory of **SVS_Tiler.py** to `--SourceFolder=`. 
 
+# TFRecords
+
+
+
+
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
 In order to run the programs there wont be any changes, same arguments, same programs, just drop `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest` part.
