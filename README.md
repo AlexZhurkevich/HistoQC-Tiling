@@ -36,7 +36,7 @@ Arguments:
   - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
   - `--magnification` magnification at which the tiles should be taken. Example: 20.0.  
   - `--size` tile size. Example: 256 (256x256).  
-  - `--overlap` you can tile your slide with overlap of `N` pixels. Remember!!! The formula for overlap: `tile size + 2 * overlap`, so if you want tiles of size 256x256, you need to pass 128 as `--size` argument and 64 as `--overlap` argument. If you want more info [OpenSlide docu](https://openslide.org/api/python/). Example: 64.  
+  - `--overlap` you can tile your slide with overlap of `N` pixels. **Remember!!!** The formula for overlap: `tile size + 2 * overlap`, so if you want tiles of size 256x256, you need to pass 128 as `--size` argument and 64 as `--overlap` argument. If you want more info [OpenSlide docu](https://openslide.org/api/python/). Example: 64.  
   - `--format` tile file format, I recommend jpeg, faster to write and takes less space. Example: 'jpeg'.   
   - `--outdir` output directory where your tiles will be stored.  
   - `--slides` argument expects a glob pattern for all of your `.svs` files, its essentially the same as last positional argument you've passed to `qc_pipeline` and `Upscaler`.  
@@ -52,7 +52,10 @@ No **username** needed, we will pass it at runtime. We will also use this docker
 Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code). To run **Sort_Tiles.py** in my container, you need to manually copy over **Sort_Tiles.py** to a folder where you would like to store the output of this program. Sample command:  
 `docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -w /mnt/YOUR_FOLDER -v /hdd:/mnt tf/tf:latest python3 Sort_Tiles.py --SourceFolder=/mnt/TILER_OUTDIR --JsonFile=/mnt/YOUR_FOLDER/metadata_file --Magnification=20 --MagDiffAllowed=0 --SortingOption=6 --PercentTest=10 --PercentValid=10 --nSplit 0`
 ### Docker arguments:
-
+  - `-u $(id -u ${USER}):$(id -g ${USER})` sets a user that uses a container, this particular command will set your host username as username running inside of the container, this will eliminate privilige issues. I do not recommend changing it unless you know what are you doing.  
+  - `-v` mount volume of host machine to a container, you should mount a volume that has `outdir` of **SVS_Tiler.py** as well as directory where you store **Sort_Tiles.py**. This way you will have an access to files from previous step, as well as sorting program. Example /hdd:/mnt.
+  - `-w` setting workplace, this is a container directory that contains **Sort_Tiles.py** file you've mounted with `-v`. Example /mnt/YOUR_FOLDER. **Remember!!!**
+ Since you've mounted host volume to a container, access to directory inside a container will be relative to a container. In other words, if you have **Sort_Tiles.py** in `/hdd/YOUR_FOLDER/Sort_Tiles.py` on host machine, when you mount with `-v /hdd:/mnt`, container filepath is this `/mnt/YOUR_FOLDER/Sort_Tiles.py` and `/mnt/YOUR_FOLDER/` is argument you should pass, otherwise container wont have an access to **Sort_Tiles.py** file.
 
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
