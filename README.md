@@ -50,20 +50,22 @@ No **username** needed, we will pass it at runtime. We will also use this docker
 
 ## 2. **Running Sorting**:
 Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code). To run **Sort_Tiles.py** in my container, you need to manually copy over **Sort_Tiles.py** to a folder where you would like to store the output of this program. Sample command:  
-`docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -w /mnt/YOUR_FOLDER -v /hdd:/mnt tf/tf:latest python3 Sort_Tiles.py --SourceFolder=/mnt/TILER_OUTDIR --JsonFile=/mnt/YOUR_FOLDER/metadata_file --Magnification=20 --MagDiffAllowed=0 --SortingOption=6 --PercentTest=10 --PercentValid=10 --nSplit 0`
+`docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -w /mnt/YOUR_SORT_FOLDER -v /hdd:/mnt tf/tf:latest python3 Sort_Tiles.py --SourceFolder=/mnt/TILER_OUTDIR --JsonFile=/mnt/YOUR_SORT_FOLDER/metadata_file --Magnification=20 --MagDiffAllowed=0 --SortingOption=6 --PercentTest=10 --PercentValid=10 --nSplit 0`
 ### Docker arguments:
   - `-u $(id -u ${USER}):$(id -g ${USER})` sets a user that uses a container, this particular command will set your host username as username running inside of the container, this will eliminate privilige issues. I do not recommend changing it unless you know what are you doing.  
   - `-v` mount volume of host machine to a container, you should mount a volume that has `outdir` of **SVS_Tiler.py** as well as directory where you store **Sort_Tiles.py**. This way you will have an access to files from previous step, as well as sorting program. Example /hdd:/mnt.
-  - `-w` setting workplace, this is a container directory that contains **Sort_Tiles.py** file you've mounted with `-v`. Example /mnt/YOUR_FOLDER. **Remember!!!**
- Since you've mounted host volume to a container, access to directory inside a container will be relative to a container. In other words, if you have **Sort_Tiles.py** in `/hdd/YOUR_FOLDER/Sort_Tiles.py` on host machine, when you mount with `-v /hdd:/mnt`, container filepath is this `/mnt/YOUR_FOLDER/Sort_Tiles.py` and `/mnt/YOUR_FOLDER/` is argument you should pass, otherwise container wont see **Sort_Tiles.py** file.
+  - `-w` setting workplace, this is a container directory that contains **Sort_Tiles.py** file you've mounted with `-v`. Example /mnt/YOUR_SORT_FOLDER. **Remember!!!**
+ Since you've mounted host volume to a container, access to directory inside a container will be relative to a container. In other words, if you have **Sort_Tiles.py** in `/hdd/YOUR_SORT_FOLDER/Sort_Tiles.py` on host machine, when you mount with `-v /hdd:/mnt`, container filepath is this `/mnt/YOUR_SORT_FOLDER/Sort_Tiles.py` and `/mnt/YOUR_SORT_FOLDER/` is argument you should pass, otherwise container wont see **Sort_Tiles.py** file.
 
 ### Sort_Tiles.py arguments:
 I recommend checking out [argument instructions](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code#02a-sort-the-tiles-into-trainvalidtest-sets-according-to-the-classes-defined). I recommend keeping your `--JsonFile=` file in the same folder as **Sort_Tiles.py**, for `--Magnification=` pass the same thing you've passed for magnification at [Tiler](https://github.com/AlexZhurkevich/HistoQC-Tiling#3-running-slide-tiler) step. Pass the output directory of **SVS_Tiler.py** to `--SourceFolder=`. 
 
 # TFRecords
 ## 1. **Installation**:
-We will be using the same docker image that we've build during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2)
+We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2).
 
+## 2. **Running TFRecords Creation**:
+To run **TFRecord_Creator.py** in my container you can: `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest python3 SVS_Tiler.py --threads 12 --size 256 --format 'jpeg' --outdir /mnt/TILER_OUTDIR --slides /mnt/SVS_FILE_PATH/*/*.svs --masks /mnt/HISTOQC_OUTDIR/*/*svs_mask_use.tif`.
 
 
 **Python instructions**:  
