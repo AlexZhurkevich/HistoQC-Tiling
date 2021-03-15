@@ -28,7 +28,7 @@ To run Upscaler in my container you can: `docker run --rm -it -v /hdd:/mnt upsca
 5. **Running Tiler**:
 To run Tiler in my container you can: `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest python3 SVS_Tiler.py --threads 12 --size 256 --format 'jpeg' --outdir /mnt/TILER_OUTDIR --slides /mnt/SVS_FILE_PATH/*/*.svs --masks /mnt/HISTOQC_OUTDIR/*/*svs_mask_use.tif`.  
 `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
-`--magnification` magnification at which the tiles should be taken. Example: 20.0
+`--magnification` magnification at which the tiles should be taken. Example: 20.0.  
 `--size` tile size. Example: 256 (256x256).  
 `--format` tile file format, I recommend jpeg, faster to write and takes less space. Example: 'jpeg' (256x256).   
 `--outdir` output directory where your tiles will be stored.  
