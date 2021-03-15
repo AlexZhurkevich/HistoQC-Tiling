@@ -13,7 +13,8 @@ Do not forget to specify **YOUR_USERNAME** as your host **username**, otherwise 
 To run HistoQC in my container you can:  
 `docker run --rm -it -v /hdd:/mnt histoqc/histoqc:latest python3 qc_pipeline --nthreads 12 --config config.ini --outdir /mnt/HISTOQC_OUTDIR /mnt/SVS_FILE_PATH/*/*.svs`.  
 I highly recommend checking out the `qc_pipeline.py` instructions on HistoQC under [Basic Usage](https://github.com/choosehappy/HistoQC#basic-usage) section. 
-It will give you an idea what kind of arguments you can pass to HistoQC, you can experiment.   
+It will give you an idea what kind of arguments you can pass to HistoQC, you can experiment.  
+
 In addition to HistoQC arguments, you should mount a correct volume to your container, it is done with `-v /hdd:/mnt` on sample command.
 What do I mean by correct volume? It is the volume or to put it simply a directory that has your folders with `.svs` files. In my case, I am mounting my `/hdd` host machine directory (has .svs files) to `/mnt` container directory, hence `--outdir` starts with `/mnt`.
 
