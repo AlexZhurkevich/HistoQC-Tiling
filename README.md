@@ -68,6 +68,15 @@ We will be using the same docker image that we've built during [sorting step](ht
 To run **TFRecord_Creator.py** in my container you can:  
 `docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python3 TFRecord_Creator.py --sort_dir '/mnt/YOUR_SORT_FOLDER' --outdir '/mnt/YOUR_TFRecords' --threads 12 --num_files 1020 --size 256 --format 'jpeg' --oversampling 'Yes'`.
 
+Arguments:
+  - `--threads` how many CPU threads you have, check with htop or top if you are not sure. Example: 12.  
+  - `--sort_dir` a directory where your sorted dataset resides, a place where you ran **Sort_Tiles.py** at previous step. Example: '/mnt/YOUR_SORT_FOLDER'.
+  - `--outdir` a directory where you would like to see TFRecords. Example: '/mnt/YOUR_TFRecords'.
+  - `--num_files` numer of train TFRecords you want, **Remember!!!** the number given should be divisible by number of threads. Example: 1020.
+  - `--size` tile size. Example: 256 (256x256).  
+  - `--format` tile file format. Example: 'jpeg'.
+  - `--oversampling` whether you want to oversample your minority class, it will repeat images from minority class until it comes close to number of images from majority class. Example: 'Yes' or 'No'.
+
 
 **Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
