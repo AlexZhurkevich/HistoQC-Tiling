@@ -65,7 +65,8 @@ I recommend checking out [argument instructions](https://github.com/ncoudray/Dee
 We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2).
 
 ## 2. **Running TFRecords Creation**:
-To run **TFRecord_Creator.py** in my container you can: `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest python3 SVS_Tiler.py --threads 12 --size 256 --format 'jpeg' --outdir /mnt/TILER_OUTDIR --slides /mnt/SVS_FILE_PATH/*/*.svs --masks /mnt/HISTOQC_OUTDIR/*/*svs_mask_use.tif`.
+To run **TFRecord_Creator.py** in my container you can:  
+`docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python3 TFRecord_Creator.py --sort_dir '/mnt/YOUR_SORT_FOLDER' --outdir '/mnt/YOUR_TFRecords' --threads 12 --num_files 1020 --size 256 --format 'jpeg' --oversampling 'Yes'`.
 
 
 **Python instructions**:  
