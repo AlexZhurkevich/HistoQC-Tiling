@@ -61,7 +61,8 @@ Sorting program was taken from [here](https://github.com/ncoudray/DeepPATH/tree/
 I recommend checking out [argument instructions](https://github.com/ncoudray/DeepPATH/tree/master/DeepPATH_code#02a-sort-the-tiles-into-trainvalidtest-sets-according-to-the-classes-defined). I recommend keeping your `--JsonFile=` file in the same folder as **Sort_Tiles.py**, for `--Magnification=` pass the same thing you've passed for magnification at [Tiler](https://github.com/AlexZhurkevich/HistoQC-Tiling#3-running-slide-tiler) step. Pass the output directory of **SVS_Tiler.py** to `--SourceFolder=`. 
 
 # TFRecords
-
+## 1. **Installation**:
+We will be using the same docker image that we've build during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2)
 
 
 
