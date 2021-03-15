@@ -44,7 +44,7 @@ Arguments:
 
 # Sorting
 ## 1. **Installation**:
-Copy over [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/TF_Dockerfile) to you machine in a separate folder and build with:  
+Copy over [TF_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/TF_Dockerfile) to you machine in a separate folder and build with:  
 `docker build --no-cache -t tf/tf:latest -f TF_Dockerfile .`  
 No **username** needed, we will pass it at runtime. We will also use this docker image for the rest of pipeline, hold on to it. 
 
