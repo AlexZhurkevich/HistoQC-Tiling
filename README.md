@@ -83,9 +83,21 @@ We will be using the same docker image that we've built during [sorting step](ht
 
 ## 2. **Running Training**:
 To run **TFRecord_Creator.py** in my container you can:  
-`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Xception.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/efficientNet_MP_best' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Xception.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_Xception_logs' --GPU_num 0,1 --batch_size 28`
+`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Xception.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
 
 Arguments:
+  - `--batch_size` your typical batch size, scaled linearly with multiple GPU. Example: 64. 
+  - `--GPU_num` which GPUs your want to use, one digit for one particular GPU, multiple for multiple GPUs (comma separated). Examples: '0' (first availbale GPU) or '0,1' (first two GPUs).
+  - `--train_num` number of training images, was given at the end of **Running TFRecords Creation** execution. Example: 2249551.
+  - `--valid_num` number of validation images, was given at the end of **Running TFRecords Creation** execution. Example: 161976.
+  - `--epochs` for how many epochs you would like to run, if no improvement will be early stopped. Example: 200.
+  - `--size` tile size. Example: 256 (256x256).  
+  - `--train_dir` this argument expects train files' `glob` pattern. Example: '/mnt/YOUR_TFRecords/train*.tfrecord'
+  - `--valid_dir` this argument expects validation files' `glob` pattern. Example: '/mnt/YOUR_TFRecords/valid*.tfrecord'
+  - `--ckpt_name` this is the name/folder of your best performing model, you can also pass filepath with it. Example: '/mnt/YOUR_TRAIN_OUTDIR/Best_Model'
+  - `--csv_log_name` this is a log name that will store your training progress information in a csv file, you can also pass filepath with it. Example: '/mnt/YOUR_TRAIN_OUTDIR/Training.log'
+  - `--tensorboard_logs` this is a folder which will have all information needed for [TensorBoard](https://www.tensorflow.org/tensorboard/get_started). If you are not familiar with this tool, I highly suggest checking it out. 
+  - `--MP` this argument is for [Mixed Precision](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html). If you are not familiar with the concept I highly suggest checking it out, it can speed up your training by 3.3x, you can also fit 2x batch size. Example: 'Yes' or 'No'.
  
 
 **Python instructions**:  
