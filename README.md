@@ -100,7 +100,9 @@ Arguments:
   - `--MP` this argument is for [Mixed Precision](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html). If you are not familiar with the concept I highly suggest checking it out, it can speed up your training by 3.3x, you can also fit 2x batch size. Example: 'Yes' or 'No'.
  
 
-**Python instructions**:  
+
+
+#**Python instructions**:  
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). In order to install requirements for my code, I recommend `python3.6, openslide-tools, python3-openslide, libvips` (through apt-get install) and `pyvips, Pillow, openslide-python` (through pip3 install). You can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image, install the same thing. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
 In order to run the programs there wont be any changes, same arguments, same programs, just drop `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest` part.
 
