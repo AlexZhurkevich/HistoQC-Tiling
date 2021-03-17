@@ -82,8 +82,8 @@ Arguments:
 We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to train on GPUs with **docker**, you need to install [NVIDIA CONTAINER TOOLKIT](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html), it will give you an ability to use `--gpus` argument. 
 
 ## 2. **Running Training**:
-To run **Xception.py** in my container you can:  
-`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Xception.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
+To run **Training.py** in my container you can:  
+`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Training.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
 
 Arguments:
   - `--batch_size` your typical batch size, scaled linearly with multiple GPU. Example: 64. 
@@ -103,7 +103,8 @@ Arguments:
 ## 1. **Installation**:
 We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to test on GPUs with **docker**, you need to install [NVIDIA CONTAINER TOOLKIT](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html), it will give you an ability to use `--gpus` argument. 
 
-## 2. **Running Training**:
+## 2. **Running Testing**:
+To run **Testing.py** in my container you can:  
 
 
 
