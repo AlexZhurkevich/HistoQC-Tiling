@@ -82,7 +82,7 @@ Arguments:
 We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to train on GPUs with **docker**, you need to install [NVIDIA CONTAINER TOOLKIT](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html), it will give you an ability to use `--gpus` argument. 
 
 ## 2. **Running Training**:
-To run **TFRecord_Creator.py** in my container you can:  
+To run **Xception.py** in my container you can:  
 `docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Xception.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
 
 Arguments:
@@ -99,6 +99,11 @@ Arguments:
   - `--tensorboard_logs` this is a folder which will have all information needed for [TensorBoard](https://www.tensorflow.org/tensorboard/get_started). If you are not familiar with this tool, I highly suggest checking it out. 
   - `--MP` this argument is for [Mixed Precision](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html). If you are not familiar with the concept I highly suggest checking it out, it can speed up your training by 3.3x, you can also fit 2x batch size. Example: 'Yes' or 'No'.
  
+# Testing
+## 1. **Installation**:
+We will be using the same docker image that we've built during [sorting step](https://github.com/AlexZhurkevich/HistoQC-Tiling#1-installation-2). In order to test on GPUs with **docker**, you need to install [NVIDIA CONTAINER TOOLKIT](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html), it will give you an ability to use `--gpus` argument. 
+
+## 2. **Running Training**:
 
 
 
