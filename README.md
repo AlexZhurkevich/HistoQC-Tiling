@@ -83,7 +83,7 @@ We will be using the same docker image that we've built during [sorting step](ht
 
 ## 2. **Running Training**:
 To run **Training.py** in my container you can:  
-`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Training.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'No' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
+`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python Training.py --train_num 2249551 --valid_num 161976 --epochs 500 --size 256 --train_dir '/mnt/YOUR_TFRecords/train*.tfrecord' --valid_dir '/mnt/YOUR_TFRecords/valid*.tfrecord' --ckpt_name '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --csv_log_name '/mnt/YOUR_TRAIN_OUTDIR/Training.log' --MP 'Yes' --tensorboard_logs '/mnt/YOUR_TRAIN_OUTDIR/TB_logs' --GPU_num 0,1 --batch_size 28`
 
 Arguments:
   - `--batch_size` your typical batch size, scaled linearly with multiple GPU. Example: 64. 
@@ -105,6 +105,21 @@ We will be using the same docker image that we've built during [sorting step](ht
 
 ## 2. **Running Testing**:
 To run **Testing.py** in my container you can:  
+`docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python3 Testing.py --mode 'evaluate' --GPU_num '2' --batch_size 288 --model_ckpt '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --test_dir '/mnt/YOUR_TFRecords/test*.tfrecord' --test_num 161976 --output_csv '/mnt/YOUT_TEST_OUTPUT/Eval_Output.csv'` or you can `docker run --gpus all -t -i -u $(id -u ${USER}):$(id -g ${USER}) -v /hdd:/mnt tf/tf:latest python3 Testing.py --mode 'predict' --GPU_num '2' --batch_size 288 --model_ckpt '/mnt/YOUR_TRAIN_OUTDIR/Best_Model' --test_dir '/mnt/YOUR_TFRecords/test*.tfrecord' --test_num 161976 --roc_im_name 'Best_ROC.jpeg' --threshold 0.5`
+
+Before we will start talking about arguments, I would like to mention that there are 2 modes you can use while testing the model, it is the reason I've included two commands as an example. First mode is `evaluate`, this will evaluate the quality of the model based on predefined metrics, you can add your own metric if you want, the output will be a dictionary with a metric name and a score, it can also be saved as csv via `--output_csv` argument. Second mode is `predict`, this one will give you a list of true labels as well as a list of predicted probabilities (per tile basis), you can use these lists as inputs into various functions from `sklearn` or any other data science library, it will empower you to do any kind of analysis, sky's the limit. Currently, predict will draw ROC curve, you can save it with `--roc_im_name argument`, it also suppors thresholding of predicted probabilities via `--threshold` argument. 
+
+Arguments:
+  - `--mode` described abouve modes. Example: 'evaluate' or 'predict'.
+  - `--GPU_num` which GPUs your want to use, limited to one GPU. Example: '0'.
+  - `--batch_size` your typical batch size, scaled linearly with multiple GPU. Example: 288.
+  - `--model_ckpt` saved best performing model. Example: '/mnt/YOUR_TRAIN_OUTDIR/Best_Model'.
+  - `--test_dir` this argument expects test files' `glob` pattern. Example: '/mnt/YOUR_TFRecords/test*.tfrecord'.
+  - `--test_num` number of testing images, was given at the end of **Running TFRecords Creation** execution. Example: 161976.
+  - `--output_csv` your metrics' scores written into a csv file, only in `evaluate` mode. Example: '/mnt/YOUT_TEST_OUTPUT/Eval_Output.csv'.
+  - `--roc_im_name` name of the ROC cruve file, only in `predict` mode. Example: '/mnt/YOUT_TEST_OUTPUT/Best_ROC.jpeg'.
+  - `--threshold` threshold for predicted values, only in `predict` mode, should be between 0 and 1. Example: 0.5.
+
 
 
 
