@@ -127,14 +127,14 @@ Arguments:
 ## HistoQC
 If you do not want to use docker, you can install HistoQC manually, instructions [here](https://github.com/choosehappy/HistoQC). 
 
-## Upscaler + Tiler
+## Upscaler + Tiler prerequisites
 I can confirm code being runnable with these libraries and corresponding versions: `openslide-tools v3.4.1, python3-openslide v1.1.1-4, libvips v8.9.1-2, python v3.8.5`, you can install these via `apt-get install`. Specific to python3 are: `pyvips v2.1.14, Pillow v7.0.0, openslide-python v1.1.1`, you can install these via `pip3 install`. If you want all the details you can look at [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) and check what I am installing in docker image. I also recommend using `ubuntu 20.04+`, because older versions might have some incompatibilities with newer `libvips` versions, you can still use `libvips` on older distros but you might need to build it from [source](https://libvips.github.io/libvips/install.html).  
 
-## Sorting, TFRecords, Training, Testing
+## Sorting, TFRecords, Training, Testing prerequisites
 I can confirm code being runnable with these libraries and corresponding versions: `tensorflow-gpu v2.4.1, opencv-python v4.5.1.48, matplotlib v3.3.4, Pillow v8.1.2, scikit-learn v0.24.1, scikit-image v0.17.2`, you can install these via `pip3 install`. If want to run on GPU make sure that you've installed correct [tensorflow prerequisites](https://www.tensorflow.org/install/source#gpu).
 
-In order to run the programs there wont be any changes, same arguments, same programs, just drop `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest` part.
-
+## Running python code
+In order to run the programs there wont be any changes, same arguments, same programs, just drop `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest` and `docker run -t -i -u $(id -u ${USER}):$(id -g ${USER}) -w /mnt/YOUR_SORT_FOLDER -v /hdd:/mnt tf/tf:latest` parts, run as usual with `python3`.
 
 
 **Additional information**:
