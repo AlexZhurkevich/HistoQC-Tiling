@@ -20,14 +20,15 @@ What do I mean by correct volume? It is the volume or to put it simply a directo
 
 # Upscaler + Tiler
 
-![](/home/kevich88/Videos/TCGA-78-7536-01Z-00-DX1.6b066140-8b82-40a5-bd48-430eeb4463fe.svs/Upscaler.gif)
-
 ## 1. **Installation**:
 Copy over [UT_Dockerfile](https://github.com/AlexZhurkevich/HistoQC-Tiling/blob/main/UT_Dockerfile) to you machine in a separate folder and build with:  
 `docker build --no-cache -t upscaler/tiler --build-arg user=YOUR_USERNAME -f UT_Dockerfile .`  
 Do not forget your **username**.
 
 ## 2. **Running Mask Upscaler**:
+
+![](Upscaler.gif)
+
 To run **Upscaler.py** in my container you can: `docker run --rm -it -v /hdd:/mnt upscaler/tiler:latest python3 Upscaler.py --masks /mnt/HISTOQC_OUTDIR/*/*svs_mask_use.png --slides /mnt/SVS_FILE_PATH/*/*.svs`.  
 - `--masks` being output folder of HistoQC step, you want to go through all of the resulting folders looking for files with `svs_mask_use.png` extension, these are finalized masks that will be upscaled by HistoQC later. I do not recommend you to relocate `svs_mask_use.png` files to a separate folder because it will break a piece of code that automatically matches masks with original slides, so please just link your HistoQC output folder.  
 - `--slides` argument expects a glob pattern for all of your `.svs` files, its essentially the same as last positional argument you've passed to `qc_pipeline`.
