@@ -11,11 +11,13 @@ from openslide import open_slide
 parser = argparse.ArgumentParser()
 parser.add_argument('--masks', type=str)
 parser.add_argument('--slides', type=str)
+parser.add_argument('--outdir', type=str)
 args = parser.parse_args()
 
 #Casting arguments
 masks = glob(args.masks)
 slides = glob(args.slides)
+outdir = args.outdir
 
 #Start timer
 start = time.time()
@@ -50,7 +52,9 @@ for key, value in Image_mask_dict.items():
     #Get height of original slide to upscale mask to it
     slide_height = slider.height
     #Construct output directory/file
-    output = os.path.join(os.path.dirname(mask), os.path.splitext(os.path.basename(mask))[0]+".tif")
+    dir = os.path.join(outdir, os.path.basename(slide))
+    os.makedirs(dir, exist_ok=True)
+    output = os.path.join(dir, os.path.splitext(os.path.basename(mask))[0]+".tif")
     #Save your upscaled mask
     image = pyvips.Image.thumbnail(mask, slide_width, height=slide_height).write_to_file(output+"[compression=jpeg,bigtiff,tile,pyramid]")
 

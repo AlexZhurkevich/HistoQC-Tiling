@@ -1,0 +1,12 @@
+name: upscaler
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=3.6
+  - openslide-python
+  - openslide
+  - imagemagick<7.0.9
+  - libvips
+  - pyvips
+  - pillow
