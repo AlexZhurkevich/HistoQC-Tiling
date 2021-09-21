@@ -3,27 +3,30 @@ from openslide import open_slide
 from openslide.deepzoom import DeepZoomGenerator
 import subprocess
 from glob import glob
-from multiprocessing import Process, JoinableQueue
+from multiprocessing import Process, JoinableQueue, Manager
 import time
 import os
 import sys
 import argparse
 from PIL import Image
-
+import numpy as np
+import pandas as pd
 
 class TileWorker(Process):
     """A child process that generates and writes tiles."""
 
-    def __init__(self, queue, mask, source, tile_size, overlap, bounds,quality):
+    def __init__(self, queue, mask, mask_min_fraction_white, source, tile_size, overlap, bounds,quality, tile_dict):
         Process.__init__(self, name='TileWorker')
 
         self._queue = queue
         self._mask = mask
+        self._mask_min_fraction_white = mask_min_fraction_white
         self._overlap = overlap
         self._bounds = bounds
         self._quality = quality
         self._tile_size = tile_size
         self._source = source
+        self._tile_dict = tile_dict
         
 
     def run(self):
@@ -41,12 +44,14 @@ class TileWorker(Process):
                     source_tile = dz_source.get_tile(source_level, address)
                     #Get mask tile
                     mask_tile = dz_mask.get_tile(mask_level, address)
-                    #Get extrema to see how white the mask tile is
-                    mask_extrema = mask_tile.convert('L').getextrema()
-                    #If you mask tile is white save your slide tile
-                    if mask_extrema == (255, 255):
+                    gray_mask_tile = mask_tile.convert('L')
+
+                    num_white_pix = np.sum(np.array(gray_mask_tile) == 255)
+                    frac_white_pix = num_white_pix / ( gray_mask_tile.width * gray_mask_tile.height )
+                    if frac_white_pix >= self._mask_min_fraction_white:
                         source_tile.save(outfile)
-                    
+                    self._tile_dict[os.path.basename(outfile)] = {'frac_white_pix': frac_white_pix}
+                        
                     self._queue.task_done()
 
                 except Exception as e:
@@ -147,7 +152,7 @@ class DeepZoomImageTiler(object):
 class DeepZoomStaticTiler(object):
     """Handles generation of tiles and metadata for all images in a slide."""
 
-    def __init__(self, mask, slide, output, formatting, overlap,
+    def __init__(self, mask, mask_min_fraction_white, slide, output, formatting, overlap,
                 limit_bounds, quality, workers, tile_size, magnification):
         
         #Open slide
@@ -164,6 +169,13 @@ class DeepZoomStaticTiler(object):
         self._workers = workers
         self._tile_size = tile_size
         self._magnification = magnification
+        #Minimum required fraction of the tile that is white (in mask)
+        self._mask_min_fraction_white = mask_min_fraction_white
+
+        #Create an empty dictionary to be accessible across all processes
+        manager = Manager()
+        tile_dict = manager.dict()
+        self._tile_dict = tile_dict
         
         #Print dimensions, in case its needed for debugging
         print(self._source.dimensions)
@@ -171,8 +183,8 @@ class DeepZoomStaticTiler(object):
 
         #Actual tiler
         for _i in range(workers):
-            TileWorker(self._queue, self._mask, self._source, self._tile_size, overlap,
-                limit_bounds, quality).start()
+            TileWorker(self._queue, self._mask, self._mask_min_fraction_white, self._source, self._tile_size, overlap,
+                       limit_bounds, quality, tile_dict).start()
 
     def run(self):
         #Mask DeepZoomGenerator
@@ -182,7 +194,12 @@ class DeepZoomStaticTiler(object):
         #Start tiling
         source_tiler = DeepZoomImageTiler(dz_source, dz_mask, self._source, self._mask, self._output, self._formatting, self._queue, self._magnification)
         source_tiler.run()
+        metadata_tbl = pd.DataFrame.from_dict(dict(self._tile_dict), orient = 'index').rename_axis('tile').reset_index(drop = False)
+        
         self._shutdown()
+
+        return metadata_tbl
+
 
     def _shutdown(self):
         for _i in range(self._workers):
@@ -205,6 +222,8 @@ def tiler():
     parser.add_argument('--outdir', type=str)
     parser.add_argument('--slides', type=str)
     parser.add_argument('--masks', type=str)
+    parser.add_argument('--mask-min-fraction-white', type=float, default=1.0)
+    parser.add_argument('--tile-metadata-output-csv', type=str, default=None)
     args = parser.parse_args()
 
     #Casting arguments
@@ -218,6 +237,8 @@ def tiler():
     outdir = args.outdir
     slides = glob(args.slides)
     masks = glob(args.masks)
+    mask_min_fraction_white = args.mask_min_fraction_white
+    tile_metadata_output_csv = args.tile_metadata_output_csv
 
     Image_mask_dict = {}
     counter = 0
@@ -238,7 +259,8 @@ def tiler():
                 continue
 
 
-    #Loop over slide/mask dictionary 
+    #Loop over slide/mask dictionary
+    metadata_dict = {}
     for key, value in Image_mask_dict.items():
         slide = key
         mask = value
@@ -247,10 +269,17 @@ def tiler():
         print(os.path.basename(mask))
 
         try:
-        	DeepZoomStaticTiler(mask, slide, output, formatting, overlap, bounds, quality, threads, tile_size, magnification).run()
+            img_metadata_tbl = DeepZoomStaticTiler(mask, mask_min_fraction_white, slide, output, formatting, overlap, bounds, quality, threads, tile_size, magnification).run()
+            if tile_metadata_output_csv is not None:
+                metadata_dict[slide] = img_metadata_tbl
         except Exception as e:
-        	print("Failed to process file %s, error: %s" % (slide, sys.exc_info()[0]))
-        	print(e)    
+            print("Failed to process file %s, error: %s" % (slide, sys.exc_info()[0]))
+            print(e)
+    if tile_metadata_output_csv is not None:
+        for k, v in metadata_dict.items():
+            v['image'] = k
+        all_metadata_tbl = pd.concat(metadata_dict, ignore_index=True)
+        all_metadata_tbl.to_csv(tile_metadata_output_csv, sep=",", index=False)
     print("End")
     end = time.time()
     print(f'Execution time {end - start:.2f}s')

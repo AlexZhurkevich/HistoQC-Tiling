@@ -10,3 +10,5 @@ dependencies:
   - libvips
   - pyvips
   - pillow
+  - numpy
+  - pandas
